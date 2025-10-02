@@ -1,13 +1,11 @@
-from config.database import Base
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from ..config.database import Base
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Text
+from .items_model import Item
 from sqlalchemy.orm import relationship
-import enum
+from ..schemas.auth_schema import USERROLE as RoleEnum
 from sqlalchemy import Enum
 
-class RoleEnum(enum.Enum):
-    ADMIN = "admin"
-    USER = "user"
-    VENDOR = "vendor"
+
 
 class User(Base):
     __tablename__ = "users"
@@ -15,7 +13,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
-    password = Column(String, nullable=False)
+    password = Column(Text, nullable=False)
     role = Column(Enum(RoleEnum), default=RoleEnum.USER, nullable=False)
     is_active = Column(Boolean, default=True)
     items = relationship("Item", back_populates="owner")
