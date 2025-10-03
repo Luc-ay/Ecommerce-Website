@@ -2,15 +2,7 @@ from ..config.database import Base
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy import Enum
-import enum
-
-
-class ItemTypeEnum(enum.Enum):
-    ELECTRONICS = "electronics"
-    FURNITURE = "furniture"
-    CLOTHING = "clothing"
-    FOOD = "food"
-    BOOKS = "books"
+from ..schemas.items_schema import ItemTypeEnum
 
 
 class Item(Base):
