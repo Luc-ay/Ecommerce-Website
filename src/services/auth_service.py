@@ -19,7 +19,30 @@ def register_user(db: Session, user: UserCreate):
     hashed_password = hash_password(user.password)
     
     
-    new_user = User(email=user.email, username=user.username, password=hashed_password, role=user.role)
+    new_user = User(email=user.email, username=user.username, password=hashed_password, role= "USER")
+    
+    # Save to DB
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    
+    return new_user 
+
+def register_vendor(db: Session, user: UserCreate):
+    
+    db_user = db.query(User).filter(User.email == user.email).first()
+    if db_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    
+    db_username = db.query(User).filter(User.username == user.username).first()
+    if db_username:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
+    
+    
+    hashed_password = hash_password(user.password)
+    
+    
+    new_user = User(email=user.email, username=user.username, password=hashed_password, role="VENDOR")
     
     # Save to DB
     db.add(new_user)
